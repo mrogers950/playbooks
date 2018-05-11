@@ -1,0 +1,12 @@
+---
+- hosts: dev
+  tasks:
+    - name: run cluster
+      vars:
+        repo_dir: "{{ home_dir }}/go/src/github.com/openshift/origin"
+        bins: "{{ home_dir }}/go/src/github.com/openshift/origin/_output/local/bin/linux/amd64"
+      environment:
+        GOPATH: "{{ home_dir }}/go"
+      import_role:
+        name: dev_origin
+        tasks_from: cluster_down.yml

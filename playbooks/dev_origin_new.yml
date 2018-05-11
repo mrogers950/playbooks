@@ -1,0 +1,6 @@
+---
+- import_playbook: dev_origin_prep.yml
+
+- import_playbook: dev_origin_build.yml
+
+- import_playbook: dev_origin_run.yml

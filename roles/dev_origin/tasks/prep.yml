@@ -1,0 +1,39 @@
+---
+- name: setenforce oh noes
+  command: >
+    setenforce 0
+
+- name: import go repo key
+  command: >
+    rpm --import https://mirror.go-repo.io/fedora/RPM-GPG-KEY-GO-REPO
+
+- name: curl go repo
+  command: >
+    curl -s https://mirror.go-repo.io/fedora/go-repo.repo -o /etc/yum.repos.d/go-repo.repo
+
+- name: install go
+  dnf:
+    name: golang
+    state: latest
+
+- name: install docker
+  dnf:
+    name: docker
+    state: latest
+
+- name: install git
+  dnf:
+    name: git
+    state: latest
+
+- name: prep /etc/sysconfig/docker
+  lineinfile:
+    path: /etc/sysconfig/docker
+    regexp: '^OPTIONS='
+    line: OPTIONS='--selinux-enabled --log-driver=journald --insecure-registry 172.30.0.0/16' 
+
+- name: make sure docker is running
+  systemd:
+    name: docker
+    state: reloaded
+    

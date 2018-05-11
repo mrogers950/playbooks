@@ -1,0 +1,15 @@
+---
+- name: get cluster status
+  shell: "oc cluster status"
+  ignore_errors: true
+  register: cluster_status
+  environment:
+    PATH: "{{ bins }}:{{ ansible_env.PATH }}"
+    KUBECONFIG: /home/ec2-user/openshift.local.clusterup/openshift-apiserver/admin.kubeconfig
+
+- name: stop cluster
+  shell: "oc cluster down"
+  environment:
+    PATH: "{{ bins }}:{{ ansible_env.PATH }}"
+    KUBECONFIG: /home/ec2-user/openshift.local.clusterup/openshift-apiserver/admin.kubeconfig
+  when: cluster_status.rc == 0

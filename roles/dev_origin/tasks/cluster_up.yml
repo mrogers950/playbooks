@@ -1,22 +1,14 @@
 ---
-- name: make sure docker is running
-  systemd:
-    name: docker
-    state: reloaded
-    
 - name: get cluster status
   shell: "oc cluster status"
   ignore_errors: true
   register: cluster_status
   environment:
     PATH: "{{ bins }}:{{ ansible_env.PATH }}"
-
-- name:
-  debug:
-    msg: "{{ cluster_status }}"
+    KUBECONFIG: /home/ec2-user/openshift.local.clusterup/openshift-apiserver/admin.kubeconfig
 
 - name: start cluster
-  shell: "oc cluster up"
+  shell: "oc cluster up --tag=latest"
   environment:
     PATH: "{{ bins }}:{{ ansible_env.PATH }}"
   when: cluster_status.rc == 1
